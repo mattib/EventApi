@@ -162,6 +162,10 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="DataSources\EventManager.cs" />
+    <Compile Include="DataSources\EventManagerEmulator.cs" />
+    <Compile Include="DataSources\EventSearchQuery.cs" />
+    <Compile Include="DataSources\IEventManager.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
