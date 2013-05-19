@@ -6,21 +6,26 @@ using System.Net.Http;
 using System.Web.Http;
 using EventApi.DataSource;
 using EventApi.Models;
+using EventApi.DataSources;
 
 namespace EventApi.Controllers
 {
     public class EventController : ApiController
     {
-        private IEventManager m_eventManager;
+        private EventManager m_eventManager;
 
         public EventController()
         {
-            m_eventManager = new EventManagerEmulator();
+            m_eventManager = new EventManager();
         }
 
         // GET api/event
         public IEnumerable<Event> Get()
         {
+            //var eventDataSource = new MongoDbEventsDataSource();
+
+            //var result = eventDataSource.GetAll();//m_eventManager.GetEvent(id);
+
             var result = m_eventManager.GetEvents(new EventSearchQuery());
             return result;
         }
@@ -28,7 +33,9 @@ namespace EventApi.Controllers
         // GET api/event/5
         public Event Get(int id)
         {
-            var result = m_eventManager.GetEvent(id);
+            var eventDataSource = new MongoDbEventsDataSource();
+
+            var result = m_eventManager.GetEvent(id);//m_eventManager.GetEvent(id);
             return result;
         }
 
@@ -52,7 +59,9 @@ namespace EventApi.Controllers
         // POST api/event - ?
         public void Post(Event value) // [FromBody]string value
         {
-            m_eventManager.SaveEvents(new Event[]{value});
+
+            m_eventManager.SaveEvents(new[] { value });
+            //m_eventManager.SaveEvents(new Event[]{value});
         }
 
         // PUT api/event/5  -- ?

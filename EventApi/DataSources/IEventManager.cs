@@ -9,14 +9,14 @@ namespace EventApi.DataSource
 {
     public interface IEventManager
     {
-        Event[] GetEvents(EventSearchQuery eventSearchQuery);
+        MongoDbEvent[] GetEvents(EventSearchQuery eventSearchQuery);
 
-        Event GetEvent(int id);
+        MongoDbEvent GetEvent(int id);
 
-        Event[] GetUserEvents(int userId, DateTime? lastModified = null);
+        MongoDbEvent[] GetUserEvents(int userId, DateTime? lastModified = null);
 
-        void SaveEvents(Event[] events);
+        void SaveEvents(MongoDbEvent[] events);
 
-        void UpdateEvents(Event[] events);
+        void UpdateEvents(MongoDbEvent[] events);
     }
 }

@@ -6,7 +6,7 @@ using EventApi.Models;
 
 namespace EventApi.DataSource
 {
-    public class EventManagerEmulator : IEventManager
+    public class EventManagerEmulator //: IEventManager
     {
         private List<Event> emulatorEvents; 
 

@@ -6,23 +6,24 @@ using System.Web;
 
 namespace EventApi.Models
 {
-    public class Event
+    public class MongoDbEvent
     {
-        public Event()
+        public MongoDbEvent()
         {
         }
-        public Event(MongoDbEvent mongoDbEvent)
+        public MongoDbEvent(Event eventItem)
         {
-            Id = mongoDbEvent.Id;
-            Text = mongoDbEvent.Text;
-            Time = mongoDbEvent.Time;
-            UserId = mongoDbEvent.UserId;
-            InputType = mongoDbEvent.InputType;
-            RowStatus = mongoDbEvent.RowStatus;
-            EventType = mongoDbEvent.EventType;
-            TaskId = mongoDbEvent.TaskId;
+            Id = eventItem.Id;
+            Text = eventItem.Text;
+            Time = eventItem.Time;
+            UserId = eventItem.UserId;
+            InputType = eventItem.InputType;
+            RowStatus = eventItem.RowStatus;
+            EventType = eventItem.EventType;
+            TaskId = eventItem.TaskId;
         }
 
+        public ObjectId MongoId { get; set; }
         public int Id { get; set; }
         public string Text { get; set; }
         public DateTime Time { get; set; }

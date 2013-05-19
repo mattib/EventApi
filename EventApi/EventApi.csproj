@@ -173,11 +173,15 @@
     <Compile Include="DataSources\EventManagerEmulator.cs" />
     <Compile Include="DataSources\EventSearchQuery.cs" />
     <Compile Include="DataSources\IEventManager.cs" />
-    <Compile Include="DataSources\MongoDbTester.cs" />
+    <Compile Include="DataSources\IEventsDataSource.cs" />
+    <Compile Include="DataSources\MongoDbEventsDataSource.cs" />
+    <Compile Include="DataSources\MongoDbManager.cs" />
+    <Compile Include="DataSources\SqlDataTester.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\MongoDbEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

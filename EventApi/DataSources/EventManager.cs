@@ -3,19 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using EventApi.Models;
+using EventApi.DataSources;
 
 namespace EventApi.DataSource
 {
-    public class EventManager : IEventManager
+    public class EventManager //: IEventManager
     {
+        private MongoDbEventsDataSource m_eventDataSource;
+
+        public EventManager()
+        {
+            m_eventDataSource = new MongoDbEventsDataSource();
+        }
+
         public Event[] GetEvents(EventSearchQuery eventSearchQuery)
         {
-            throw new NotImplementedException();
+            var eventsList = new List<Event>();
+            
+            var result = m_eventDataSource.GetAll();
+            foreach (var mongoEvent in result)
+            {
+                var eventItem = new Event(mongoEvent);
+                eventsList.Add(eventItem);
+            }
+
+            return eventsList.ToArray();
         }
 
         public Event GetEvent(int id)
         {
-            throw new NotImplementedException();
+            var mongoEvent = m_eventDataSource.GetEvent(id);
+
+            var result = new Event(mongoEvent);
+            
+            return result;
         }
 
         public Event[] GetUserEvents(int userId, DateTime? lastModified = null)
@@ -25,7 +46,13 @@ namespace EventApi.DataSource
 
         public void SaveEvents(Event[] events)
         {
-            throw new NotImplementedException();
+            foreach (var eventItem in events)
+            {
+                var mongoEvent = new MongoDbEvent(eventItem);
+                m_eventDataSource.SaveEvent(mongoEvent);
+            }
+
+
         }
 
         public void UpdateEvents(Event[] events)
