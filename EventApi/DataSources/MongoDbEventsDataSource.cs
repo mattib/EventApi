@@ -1,4 +1,5 @@
 ﻿using EventApi.Models;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
@@ -7,34 +8,70 @@ using System.Web;
 
 namespace EventApi.DataSources
 {
-    public class MongoDbEventsDataSource //: IEventsDataSource
+    public class MongoDbEventsDataSource : MongoDbDataSource, IEventsDataSource
     {
-        private MongoDbManager m_dbManager;
-        public MongoDbEventsDataSource()
+        private readonly string m_eventsDataBaseName = "events";
+
+        private MongoCollection<MongoDbEvent> GetEventsCollection()
         {
-            m_dbManager = new MongoDbManager();
+            var collections = DbManager.GetEventsCollection<MongoDbEvent>(m_eventsDataBaseName);
+
+            return collections;
         }
 
-        public MongoDbEvent[] GetAll()
+        public Event[] GetAll()
         {
-            var eventsCollection = m_dbManager.GetEventsCollection();
+            var eventsCollection = GetEventsCollection();
+            var query = Query<MongoDbEvent>.Where(e => e.RowStatus != 1);
+            var events = eventsCollection.Find(query);
 
-            var events = eventsCollection.FindAll();
             return events.ToArray();
         }
 
-        public MongoDbEvent GetEvent(int id)
+        public Event GetEvent(int id)
         {
-            var eventsCollection = m_dbManager.GetEventsCollection();
+            var eventsCollection = GetEventsCollection();
             var query = Query<MongoDbEvent>.EQ(e => e.Id, id);
             var eventItem = eventsCollection.FindOne(query);
+
             return eventItem;
         }
 
-        public void SaveEvent(MongoDbEvent eventItem)
+        public void SaveEvent(Event eventItem)
         {
-            var eventsCollection = m_dbManager.GetEventsCollection();
+            if (eventItem.Id == 0)
+            {
+                eventItem.Id = NewId();
+            }
+
+            var MongoDbEvent = new MongoDbEvent(eventItem);
+
+            var eventsCollection = GetEventsCollection();
+            eventsCollection.Save(MongoDbEvent);
+        }
+
+        public void DeleteEvent(int id)
+        {
+            var eventItem = GetEvent(id);
+            eventItem.RowStatus = 1;
+            var eventsCollection = GetEventsCollection();
             eventsCollection.Save(eventItem);
+        }
+
+        public int NewId()
+        {
+            var events = GetAll();
+            var result = 0;
+            foreach (var item in events)
+            {
+                var MongoDbEvent = (MongoDbEvent)item;
+                if (MongoDbEvent.MongoId.Pid > result)
+                {
+                    result = MongoDbEvent.MongoId.Pid;
+                }
+            }
+
+            return result + 1;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace EventApi.Controllers
 {
     public class EventController : ApiController
     {
-        private EventManager m_eventManager;
+        private IEventManager m_eventManager;
 
         public EventController()
         {
@@ -22,10 +22,6 @@ namespace EventApi.Controllers
         // GET api/event
         public IEnumerable<Event> Get()
         {
-            //var eventDataSource = new MongoDbEventsDataSource();
-
-            //var result = eventDataSource.GetAll();//m_eventManager.GetEvent(id);
-
             var result = m_eventManager.GetEvents(new EventSearchQuery());
             return result;
         }
@@ -33,13 +29,11 @@ namespace EventApi.Controllers
         // GET api/event/5
         public Event Get(int id)
         {
-            var eventDataSource = new MongoDbEventsDataSource();
-
-            var result = m_eventManager.GetEvent(id);//m_eventManager.GetEvent(id);
+            var result = m_eventManager.GetEvent(id);
             return result;
         }
 
-        // GET api/event/?userId=4
+        // GET api/event/?userId={userId}
         public IEnumerable<Event> GetByUser(int userId)
         {
             var eventSearchQuery = new EventSearchQuery {UserId = userId};
@@ -47,6 +41,7 @@ namespace EventApi.Controllers
             return result;
         }
 
+        // GET api/Event?userId={userId}&time={time}
         public IEnumerable<Event> GetByUserAndTime(int userId, string time)
         {
             var dateTime = DateTime.Parse(time);
@@ -59,22 +54,18 @@ namespace EventApi.Controllers
         // POST api/event - ?
         public void Post(Event value) // [FromBody]string value
         {
-
             m_eventManager.SaveEvents(new[] { value });
-            //m_eventManager.SaveEvents(new Event[]{value});
         }
 
-        // PUT api/event/5  -- ?
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        //// PUT api/event/5  -- ?
+        //public void Put(int id, [FromBody]string value)
+        //{
+        //}
 
         // DELETE api/event/5
         public void Delete(int id)
         {
-            var @event = m_eventManager.GetEvent(id);
-            @event.RowStatus = 1;
-            m_eventManager.UpdateEvents(new [] {@event});
+            m_eventManager.DeleteEvent(id);
         }
     }
 }

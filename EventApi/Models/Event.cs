@@ -9,18 +9,18 @@ namespace EventApi.Models
     public class Event
     {
         public Event()
+        { }
+
+        public Event(Event eventItem)
         {
-        }
-        public Event(MongoDbEvent mongoDbEvent)
-        {
-            Id = mongoDbEvent.Id;
-            Text = mongoDbEvent.Text;
-            Time = mongoDbEvent.Time;
-            UserId = mongoDbEvent.UserId;
-            InputType = mongoDbEvent.InputType;
-            RowStatus = mongoDbEvent.RowStatus;
-            EventType = mongoDbEvent.EventType;
-            TaskId = mongoDbEvent.TaskId;
+            Id = eventItem.Id;
+            Text = eventItem.Text;
+            Time = eventItem.Time;
+            UserId = eventItem.UserId;
+            InputType = eventItem.InputType;
+            RowStatus = eventItem.RowStatus;
+            EventType = eventItem.EventType;
+            TaskId = eventItem.TaskId;
         }
 
         public int Id { get; set; }
